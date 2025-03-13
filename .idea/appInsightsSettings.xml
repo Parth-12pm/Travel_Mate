@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.travelmate" />
+                  <option name="mobileSdkAppId" value="1:685313920796:android:3b3c2ac4d339e208a9b4d9" />
+                  <option name="projectId" value="travel-mate-61044" />
+                  <option name="projectNumber" value="685313920796" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
