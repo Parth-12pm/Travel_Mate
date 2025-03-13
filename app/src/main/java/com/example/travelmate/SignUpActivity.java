@@ -76,7 +76,7 @@ public class SignUpActivity extends AppCompatActivity {
         config.put("api_secret", "6E-sjMWsjvHMf8MXH-mDeAMXfhs"); // Replace with your Cloudinary API secret
         MediaManager.init(this, config);
 
-        // Find views
+
         EditText signUpName = findViewById(R.id.signUpName);
         EditText signUpSurname = findViewById(R.id.signUpSurname);
         EditText signUpEmail = findViewById(R.id.signUpEmail);
