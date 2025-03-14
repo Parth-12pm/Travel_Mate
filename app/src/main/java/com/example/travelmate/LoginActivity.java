@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, HomePageActivity.class));
                             // Navigate to the main activity
                         } else {
                             Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

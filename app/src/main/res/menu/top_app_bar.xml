@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/account_circle_24px"
+        android:title="Profile" />
+    <item
+        android:id="@+id/menu_dark_mode"
+        android:icon="@drawable/dark_mode_24px"
+        android:title="Dark Mode" />
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/logout_24px"
+        android:title="Logout" />
+</menu>

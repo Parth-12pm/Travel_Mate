@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/profileButton"
+        android:icon="@drawable/account_circle_24px"
+        android:title="@string/menu_profile" />
+    <!-- Dark Mode Toggle -->
+    <item
+        android:id="@+id/menu_dark_mode"
+        android:icon="@drawable/dark_mode_24px"
+        android:title="Dark Mode">
+        <menu>
+            <item
+                android:id="@+id/menu_toggle_dark_mode"
+                android:title="Toggle Dark Mode"
+                android:checkable="true"
+                android:checked="false" />
+        </menu>
+    </item>
+
+    <!-- Logout -->
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/logout_24px"
+        android:title="Logout" />
+</menu>

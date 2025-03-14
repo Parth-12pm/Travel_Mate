@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Profile Button -->
+    <Button
+        android:id="@+id/profileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:drawableStart="@drawable/account_circle_24px"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:textSize="16sp" />
+
+    <!-- Dark Mode Button -->
+    <ToggleButton
+        android:id="@+id/darkModeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Dark Mode"
+        android:drawableStart="@drawable/dark_mode_24px"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:textSize="16sp" />
+
+    <!-- Logout Button -->
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:drawableStart="@drawable/logout_24px"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:textSize="16sp"
+        android:textColor="@color/md_theme_error" />
+</LinearLayout>
