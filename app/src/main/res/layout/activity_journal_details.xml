@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/main"
-    android:background="@color/md_theme_background">
+    android:background="@color/md_theme_background"
+    android:orientation="vertical">
 
     <!-- Toolbar with Back Button and Save Icon -->
     <com.google.android.material.appbar.MaterialToolbar
@@ -14,22 +14,36 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/md_theme_surface"
-        app:navigationIcon="@drawable/arrow_back_24px"
         app:navigationContentDescription="Back"
+        app:navigationIcon="@drawable/arrow_back_24px"
         app:title="Journal Entry"
         app:titleTextColor="@color/md_theme_onSurface">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveButton"
-            style="@style/Widget.Material3.Button.TextButton"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:text="Save"
-            app:icon="@drawable/save_24px"
-            app:iconTint="@color/md_theme_primary" />
-    </com.google.android.material.appbar.MaterialToolbar>
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/deleteButton"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="Delete"
+                app:icon="@drawable/delete_24px"
+                app:iconTint="@color/md_theme_error" />
+
+            <Button
+                android:id="@+id/saveButton"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="Save"
+                app:icon="@drawable/save_24px"
+                app:iconTint="@color/md_theme_primary" />
+        </LinearLayout>
+    </com.google.android.material.appbar.MaterialToolbar>
     <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -58,12 +72,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:minHeight="200dp"
-                android:gravity="top"
-                android:inputType="textMultiLine"
                 android:background="@android:color/transparent"
-                android:textColor="@color/md_theme_onBackground"
+                android:gravity="top"
                 android:hint="Write your adventure..."
+                android:inputType="textMultiLine"
+                android:minHeight="200dp"
+                android:textColor="@color/md_theme_onBackground"
                 android:textSize="16sp" />
 
             <!-- Map Preview -->
@@ -80,8 +94,8 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/md_theme_surfaceVariant"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="12dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
 
                 <fragment
                     android:id="@+id/mapFragment"
@@ -99,18 +113,22 @@
                 android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 android:textColor="@color/md_theme_onBackground" />
 
+            <!-- Replace the entire HorizontalScrollView section with this: -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/photosContainer"
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!-- Add Photo Button -->
+                    <!-- Images will be added here programmatically -->
+
+                    <!-- Add Photo Button (keep this as the last item) -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/btnAddPhoto"
                         android:layout_width="120dp"

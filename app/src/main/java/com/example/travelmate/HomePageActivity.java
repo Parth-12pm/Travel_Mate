@@ -2,6 +2,7 @@ package com.example.travelmate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import com.bumptech.glide.Glide;
 import java.util.Objects;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -34,6 +41,8 @@ public class HomePageActivity extends AppCompatActivity {
     private CircleImageView profileIcon;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()); // Adjust format if needed
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,52 +87,64 @@ public class HomePageActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
-        // Clear existing views
         upcomingTripsContainer.removeAllViews();
         recentTripsContainer.removeAllViews();
 
-        // Load trips from Firestore
         FirebaseFirestore.getInstance().collection("trips")
                 .whereEqualTo("userId", user.getUid())
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // Get trip data directly from document
                         String source = doc.getString("source");
                         String destination = doc.getString("destination");
-                        String date = doc.getString("date");
+                        String dateStr = doc.getString("date"); // Get date as string
                         String tripId = doc.getId();
 
-                        // Create trip card
-                        MaterialCardView card = new MaterialCardView(this);
-                        card.setLayoutParams(new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT));
-                        card.setCardElevation(4);
-                        card.setRadius(8);
-                        card.setContentPadding(16, 16, 16, 16);
-                        TextView textView = new TextView(this);
-                        textView.setText(source + " to " + destination + "\n" + date);
-                        textView.setTextSize(16);
-                        textView.setPadding(8, 8, 8, 8);
-                        card.addView(textView);
+                        try {
+                            Date tripDate = dateFormatter.parse(dateStr);
+                            if (tripDate != null) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(tripDate);
+                                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                                calendar.set(Calendar.MINUTE, 0);
+                                calendar.set(Calendar.SECOND, 0);
+                                calendar.set(Calendar.MILLISECOND, 0);
+                                tripDate = calendar.getTime();
 
-                        // Add to appropriate container (you can add date comparison logic here)
-                        upcomingTripsContainer.addView(card);
+                                Date today = Calendar.getInstance().getTime();
+                                Calendar todayCalendar = Calendar.getInstance();
+                                todayCalendar.setTime(today);
+                                todayCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                                todayCalendar.set(Calendar.MINUTE, 0);
+                                todayCalendar.set(Calendar.SECOND, 0);
+                                todayCalendar.set(Calendar.MILLISECOND, 0);
+                                today = todayCalendar.getTime();
 
-                        // Set click listener
-                        card.setOnClickListener(v -> {
-                            Intent intent = new Intent(HomePageActivity.this, JournalDetailsActivity.class);
-                            intent.putExtra("tripId", tripId);
-                            startActivity(intent);
-                        });
+                                MaterialCardView card = createTripCard(source, destination, dateStr);
+                                card.setOnClickListener(v -> {
+                                    Intent intent = new Intent(HomePageActivity.this, JournalDetailsActivity.class);
+                                    intent.putExtra("tripId", tripId);
+                                    startActivity(intent);
+                                });
+
+                                if (tripDate.after(today)) {
+                                    upcomingTripsContainer.addView(card);
+                                } else {
+                                    recentTripsContainer.addView(card);
+                                }
+                            }
+                        } catch (ParseException e) {
+                            // Handle date parsing error (e.g., log it, display an error message)
+                            e.printStackTrace();  // Log the error for debugging
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to load trips", Toast.LENGTH_SHORT).show();
                 });
     }
-    private void addTripCard(LinearLayout container, String tripDetails) {
+
+    private MaterialCardView createTripCard(String source, String destination, String date) {
         MaterialCardView card = new MaterialCardView(this);
         card.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -132,12 +153,11 @@ public class HomePageActivity extends AppCompatActivity {
         card.setRadius(8);
         card.setContentPadding(16, 16, 16, 16);
         TextView textView = new TextView(this);
-        textView.setText(tripDetails);
+        textView.setText(source + " to " + destination + "\n" + date);
         textView.setTextSize(16);
         textView.setPadding(8, 8, 8, 8);
-
         card.addView(textView);
-        container.addView(card);
+        return card;
     }
 
     private boolean onNavItemSelected(@NonNull MenuItem item) {
@@ -172,9 +192,6 @@ public class HomePageActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.addButton) {
             startActivity(new Intent(this, AddTripActivity.class));
-            return true;
-        } else if (id == R.id.journalButton) {
-            startActivity(new Intent(this, JournalDetailsActivity.class));
             return true;
         }
         return false;

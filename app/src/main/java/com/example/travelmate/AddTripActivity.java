@@ -49,6 +49,8 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
     private TextView tvSelectedDate;
     private LatLng sourceLatLng, destinationLatLng;
 
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()); // Consistent format
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,9 +143,9 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            String date = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                    .format(new Date(selection));
-            tvSelectedDate.setText(date);
+            // Format the selected date to yyyy-MM-dd
+            String formattedDate = dateFormatter.format(new Date(selection));
+            tvSelectedDate.setText(formattedDate);
             tvSelectedDate.setTextColor(getResources().getColor(R.color.md_theme_onBackground));
         });
 
