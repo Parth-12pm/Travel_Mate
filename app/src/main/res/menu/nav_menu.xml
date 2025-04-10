@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/profileButton"
-        android:icon="@drawable/account_circle_24px"
-        android:title="@string/menu_profile" />
     <!-- Dark Mode Toggle -->
     <item
         android:id="@+id/menu_dark_mode"

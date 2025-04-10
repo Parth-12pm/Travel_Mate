@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -19,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import de.hdodenhof.circleimageview.CircleImageView;
 import com.bumptech.glide.Glide;
-
 import java.util.Objects;
 
 
@@ -74,14 +75,54 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void loadTrips() {
-        // Fetch upcoming and recent trips from Firestore
-        // Example data (replace with Firestore queries)
-        addTripCard(upcomingTripsContainer, "Paris, France - May 15, 2025");
-        addTripCard(upcomingTripsContainer, "Tokyo, Japan - Jun 10, 2025");
-        addTripCard(recentTripsContainer, "New York, USA - Jan 10, 2025");
-        addTripCard(recentTripsContainer, "London, UK - Feb 5, 2025");
-    }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
 
+        // Clear existing views
+        upcomingTripsContainer.removeAllViews();
+        recentTripsContainer.removeAllViews();
+
+        // Load trips from Firestore
+        FirebaseFirestore.getInstance().collection("trips")
+                .whereEqualTo("userId", user.getUid())
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // Get trip data directly from document
+                        String source = doc.getString("source");
+                        String destination = doc.getString("destination");
+                        String date = doc.getString("date");
+                        String tripId = doc.getId();
+
+                        // Create trip card
+                        MaterialCardView card = new MaterialCardView(this);
+                        card.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
+                        card.setCardElevation(4);
+                        card.setRadius(8);
+                        card.setContentPadding(16, 16, 16, 16);
+                        TextView textView = new TextView(this);
+                        textView.setText(source + " to " + destination + "\n" + date);
+                        textView.setTextSize(16);
+                        textView.setPadding(8, 8, 8, 8);
+                        card.addView(textView);
+
+                        // Add to appropriate container (you can add date comparison logic here)
+                        upcomingTripsContainer.addView(card);
+
+                        // Set click listener
+                        card.setOnClickListener(v -> {
+                            Intent intent = new Intent(HomePageActivity.this, JournalDetailsActivity.class);
+                            intent.putExtra("tripId", tripId);
+                            startActivity(intent);
+                        });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load trips", Toast.LENGTH_SHORT).show();
+                });
+    }
     private void addTripCard(LinearLayout container, String tripDetails) {
         MaterialCardView card = new MaterialCardView(this);
         card.setLayoutParams(new LinearLayout.LayoutParams(
@@ -90,7 +131,6 @@ public class HomePageActivity extends AppCompatActivity {
         card.setCardElevation(4);
         card.setRadius(8);
         card.setContentPadding(16, 16, 16, 16);
-
         TextView textView = new TextView(this);
         textView.setText(tripDetails);
         textView.setTextSize(16);
@@ -102,11 +142,10 @@ public class HomePageActivity extends AppCompatActivity {
 
     private boolean onNavItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.menu_profile){
+        if (id == R.id.menu_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
             return true;
-        }
-        if (id == R.id.menu_toggle_dark_mode) {
+        } else if (id == R.id.menu_toggle_dark_mode) {
             // Toggle dark mode
             boolean isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES;
             AppCompatDelegate.setDefaultNightMode(isDarkMode ? AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES);
@@ -115,7 +154,7 @@ public class HomePageActivity extends AppCompatActivity {
             // Logout the user
             mAuth.signOut();
             startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            finish(); // Close the HomePageActivity
             return true;
         }
         return false;
@@ -135,7 +174,7 @@ public class HomePageActivity extends AppCompatActivity {
             startActivity(new Intent(this, AddTripActivity.class));
             return true;
         } else if (id == R.id.journalButton) {
-            startActivity(new Intent(this, JournalListActivity.class));
+            startActivity(new Intent(this, JournalDetailsActivity.class));
             return true;
         }
         return false;

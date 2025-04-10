@@ -2,24 +2,75 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".JournalListActivity">
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:background="@color/md_theme_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Toolbar with Back Button Only -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/md_theme_surface"
+        app:navigationIcon="@drawable/arrow_back_24px"
+        app:navigationContentDescription="Back"
+        app:title="Journal"
+        app:titleTextColor="@color/md_theme_onSurface"/>
+
+    <!-- Search Bar (Autocomplete) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchInputLayout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_x="56dp"
-        android:layout_y="311dp"
-        android:text="This is Journal List section"
-        android:textSize="30dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="coming soon !!!"/>
+        android:layout_margin="16dp"
+        android:hint="          Search journal entries"
+        app:boxStrokeColor="@color/md_theme_outline"
+        app:startIconDrawable="@drawable/search_24px"
+        app:startIconTint="@color/md_theme_onSurfaceVariant">
 
+        <AutoCompleteTextView
+            android:id="@+id/actvSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="text"
+            android:textColor="@color/md_theme_onBackground"
+            android:completionThreshold="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Journal Entries List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvJournalEntries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        android:contentDescription="Recycler View"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/emptyState"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/note_alt_24px"
+            app:tint="@color/md_theme_onSurfaceVariant" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No journal entries yet"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="@color/md_theme_onBackground" />
+    </LinearLayout>
 </LinearLayout>

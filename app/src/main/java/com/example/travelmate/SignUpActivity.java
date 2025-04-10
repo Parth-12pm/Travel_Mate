@@ -1,5 +1,6 @@
 package com.example.travelmate;
 
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Uri imageUri;
     private String profilePictureUrl = "";
 
-    // ActivityResultLauncher for image selection
+// ActivityResultLauncher for image selection
     private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -44,14 +45,14 @@ public class SignUpActivity extends AppCompatActivity {
                     Intent data = result.getData();
                     if (data != null && data.getData() != null) {
                         // Image selected from gallery
-                        imageUri = data.getData();
+                        imageUri = data.getData(); // Assign the gallery URI to imageUri
                         uploadImageToCloudinary(imageUri);
                     } else {
-                        // Image captured from camera
+                        // Image captured from camera or the previous imageUri
                         if (imageUri != null) {
                             uploadImageToCloudinary(imageUri);
                         } else {
-                            Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Failed to capture or select image", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
@@ -138,9 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
                                             finish(); // Close the activity
                                         })
-                                        .addOnFailureListener(e -> {
-                                            Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show();
-                                        });
+                                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show());
                             }
                         } else {
                             if (task.getException() != null) {
@@ -166,6 +165,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void uploadImageToCloudinary(Uri imageUri) {
+        if (imageUri == null) {
+            Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
         MediaManager.get().upload(imageUri).callback(new UploadCallback() {
             @Override
             public void onStart(String requestId) {
@@ -193,5 +196,4 @@ public class SignUpActivity extends AppCompatActivity {
                 // Upload rescheduled
             }
         }).dispatch();
-    }
-}
+    }}
