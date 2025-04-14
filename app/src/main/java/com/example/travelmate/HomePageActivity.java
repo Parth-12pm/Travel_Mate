@@ -1,8 +1,10 @@
 package com.example.travelmate;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -145,18 +147,58 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private MaterialCardView createTripCard(String source, String destination, String date) {
+        // Create card with styling that matches your theme
         MaterialCardView card = new MaterialCardView(this);
-        card.setLayoutParams(new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 0, 16); // Add bottom margin
+        card.setLayoutParams(layoutParams);
         card.setCardElevation(4);
-        card.setRadius(8);
-        card.setContentPadding(16, 16, 16, 16);
-        TextView textView = new TextView(this);
-        textView.setText(source + " to " + destination + "\n" + date);
-        textView.setTextSize(16);
-        textView.setPadding(8, 8, 8, 8);
-        card.addView(textView);
+        card.setRadius(12);
+        card.setCardBackgroundColor(getResources().getColor(R.color.md_theme_surfaceContainerHigh));
+        card.setStrokeWidth(1);
+        card.setStrokeColor(getResources().getColor(R.color.md_theme_outlineVariant));
+
+        // Create inner layout
+        LinearLayout innerLayout = new LinearLayout(this);
+        innerLayout.setOrientation(LinearLayout.VERTICAL);
+        innerLayout.setPadding(24, 24, 24, 24);
+
+        // Create and style route text (source to destination)
+        TextView routeText = new TextView(this);
+        routeText.setText(source + " → " + destination);
+        routeText.setTextSize(18);
+        routeText.setTextColor(getResources().getColor(R.color.md_theme_onSurface));
+        routeText.setTypeface(null, Typeface.BOLD);
+
+        // Create and style date text
+        TextView dateText = new TextView(this);
+        try {
+            // Format the date to be more readable
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+            Date tripDate = inputFormat.parse(date);
+            dateText.setText(outputFormat.format(tripDate));
+        } catch (ParseException e) {
+            dateText.setText(date); // Fallback to original format if parsing fails
+        }
+        dateText.setTextSize(14);
+        dateText.setTextColor(getResources().getColor(R.color.md_theme_onSurfaceVariant));
+        dateText.setPadding(0, 8, 0, 0);
+
+        // Add views to inner layout
+        innerLayout.addView(routeText);
+        innerLayout.addView(dateText);
+
+        // Add inner layout to card
+        card.addView(innerLayout);
+
+        // Add ripple effect using theme attributes
+        TypedValue outValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        card.setForeground(getDrawable(outValue.resourceId));
+
         return card;
     }
 

@@ -57,6 +57,16 @@ public class ProfileActivity extends AppCompatActivity {
         // Set up toolbar
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
+        // Add edit button to toolbar
+        toolbar.inflateMenu(R.menu.profile_menu);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_edit) {
+                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
+                return true;
+            }
+            return false;
+        });
+
 
         // Load user data
         loadUserData();
