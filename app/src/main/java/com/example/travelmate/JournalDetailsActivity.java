@@ -243,15 +243,6 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
         Glide.with(this).load(imageUrl).into(imageView);
 
         dialog.findViewById(R.id.btnClose).setOnClickListener(v -> dialog.dismiss());
-
-        // Adjust dialog window attributes for better appearance (optional)
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT; // Or MATCH_PARENT if you want full height
-        lp.gravity = Gravity.CENTER;
-        dialog.getWindow().setAttributes(lp);
-
         dialog.show();
     }
 
