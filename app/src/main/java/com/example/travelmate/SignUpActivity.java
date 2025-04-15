@@ -72,9 +72,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Initialize Cloudinary
         Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", "diozithos"); // Replace with your Cloudinary cloud name
-        config.put("api_key", "191271234992971"); // Replace with your Cloudinary API key
-        config.put("api_secret", "6E-sjMWsjvHMf8MXH-mDeAMXfhs"); // Replace with your Cloudinary API secret
+        config.put("cloud_name", BuildConfig.CLOUD_NAME);
+        config.put("api_key", BuildConfig.CLOUD_API_SECRET);
+        config.put("api_secret", BuildConfig.CLOUD_API_SECRET);
         MediaManager.init(this, config);
 
 

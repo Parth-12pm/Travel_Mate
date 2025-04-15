@@ -149,9 +149,9 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
 
     private void initCloudinary() {
         Map config = new HashMap();
-        config.put("cloud_name", "diozithos");
-        config.put("api_key", "191271234992971");
-        config.put("api_secret", "6E-sjMWsjvHMf8MXH-mDeAMXfhs");
+        config.put("cloud_name", BuildConfig.CLOUD_NAME);
+        config.put("api_key", BuildConfig.CLOUD_API_SECRET);
+        config.put("api_secret", BuildConfig.CLOUD_API_SECRET);
         MediaManager.init(this, config);
     }
 
