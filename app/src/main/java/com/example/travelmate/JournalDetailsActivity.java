@@ -246,21 +246,6 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
         dialog.show();
     }
 
-    @UnstableApi
-    private void loadImages(DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.contains("images")) {
-            List<String> images = (List<String>) documentSnapshot.get("images");
-            if (images != null && !images.isEmpty()) {  // Check for null or empty list
-                for (String imageUrl : images) {
-                    addImageToLayout(imageUrl);
-                }
-            } else {
-                androidx.media3.common.util.Log.d("LoadImages", "No images found or images list is empty");
-            }
-        } else {
-            androidx.media3.common.util.Log.d("LoadImages", "No 'images' field found in document");
-        }
-    }
 
     private void saveImageUrlToFirestore(String imageUrl) {
         FirebaseFirestore.getInstance().collection("trips").document(tripId).update("images", FieldValue.arrayUnion(imageUrl)).addOnFailureListener(e -> {
