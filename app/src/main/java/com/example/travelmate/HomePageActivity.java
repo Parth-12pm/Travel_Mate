@@ -85,6 +85,25 @@ public class HomePageActivity extends AppCompatActivity {
         loadProfilePicture();
     }
 
+
+    protected  void onResume(){
+        super.onResume();
+        loadTrips();
+        loadProfilePicture();
+    }
+
+    protected void onStop(){
+        super.onStop();
+        loadTrips();
+        loadProfilePicture();
+    }
+
+    protected void onPause(){
+        super.onPause();
+        loadTrips();
+        loadProfilePicture();
+    }
+
     private void loadTrips() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;

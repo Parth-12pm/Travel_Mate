@@ -75,6 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Load current user data
         loadUserData();
+        initCloudinary();
 
         // Set up profile picture change
         profileImage.setOnClickListener(v -> openImagePicker());
@@ -153,6 +154,14 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onReschedule(String requestId, ErrorInfo error) {}
         }).dispatch();
+    }
+
+    private void initCloudinary() {
+        Map config = new HashMap();
+        config.put("cloud_name", BuildConfig.CLOUD_NAME);
+        config.put("api_key", BuildConfig.CLOUD_API_KEY);
+        config.put("api_secret", BuildConfig.CLOUD_API_SECRET);
+        MediaManager.init(this, config);
     }
 
     private void saveProfileChanges() {
