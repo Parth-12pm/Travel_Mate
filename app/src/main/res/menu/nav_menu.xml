@@ -3,12 +3,12 @@
     <!-- Dark Mode Toggle -->
     <item
         android:id="@+id/menu_dark_mode"
-        android:icon="@drawable/dark_mode_24px"
         android:title="Dark Mode">
         <menu>
             <item
                 android:id="@+id/menu_toggle_dark_mode"
                 android:title="Toggle Dark Mode"
+                android:icon="@drawable/dark_mode_24px"
                 android:checkable="true"
                 android:checked="false" />
         </menu>

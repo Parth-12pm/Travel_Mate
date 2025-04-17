@@ -8,14 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder> {
     private List<Trip> tripList;
-    private Context context; // Add context
+    private Context context;
 
-    public TripAdapter(List<Trip> tripList, Context context) { // Pass context in constructor
+    public TripAdapter(List<Trip> tripList, Context context) {
         this.tripList = tripList;
         this.context = context;
     }

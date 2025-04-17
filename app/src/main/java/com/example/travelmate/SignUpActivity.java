@@ -1,6 +1,4 @@
 package com.example.travelmate;
-
-import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,19 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -37,29 +32,26 @@ public class SignUpActivity extends AppCompatActivity {
     private Uri imageUri;
     private String profilePictureUrl = "";
 
-// ActivityResultLauncher for image selection
-    private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK) {
-                    Intent data = result.getData();
-                    if (data != null && data.getData() != null) {
-                        // Image selected from gallery
-                        imageUri = data.getData(); // Assign the gallery URI to imageUri
-                        uploadImageToCloudinary(imageUri);
-                    } else {
-                        // Image captured from camera or the previous imageUri
-                        if (imageUri != null) {
-                            uploadImageToCloudinary(imageUri);
-                        } else {
-                            Toast.makeText(this, "Failed to capture or select image", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+    // ActivityResultLauncher for image selection
+    private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK) {
+            Intent data = result.getData();
+            if (data != null && data.getData() != null) {
+                // Image selected from gallery
+                imageUri = data.getData();
+                uploadImageToCloudinary(imageUri);
+            } else {
+                // Image captured from camera or the previous imageUri
+                if (imageUri != null) {
+                    uploadImageToCloudinary(imageUri);
                 } else {
-                    Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to capture or select image", Toast.LENGTH_SHORT).show();
                 }
             }
-    );
+        } else {
+            Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +61,6 @@ public class SignUpActivity extends AppCompatActivity {
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
-        // Initialize Cloudinary
-        Map<String, String> config = new HashMap<>();
-        config.put("cloud_name", BuildConfig.CLOUD_NAME);
-        config.put("api_key", BuildConfig.CLOUD_API_KEY);
-        config.put("api_secret", BuildConfig.CLOUD_API_SECRET);
-        MediaManager.init(this, config);
 
 
         EditText signUpName = findViewById(R.id.signUpName);
@@ -106,7 +91,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Handle registration
         registerButton.setOnClickListener(v -> {
             String name = signUpName.getText().toString();
             String surname = signUpSurname.getText().toString();
@@ -120,33 +104,29 @@ public class SignUpActivity extends AppCompatActivity {
             }
 
             // Create user with email and password
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                // Save user details to Firestore
-                                Map<String, Object> userData = new HashMap<>();
-                                userData.put("name", name);
-                                userData.put("surname", surname);
-                                userData.put("email", email);
-                                userData.put("gender", gender);
-                                userData.put("profilePictureUrl", profilePictureUrl); // Cloudinary URL
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    if (user != null) {
+                        // Save user details to Firestore
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("name", name);
+                        userData.put("surname", surname);
+                        userData.put("email", email);
+                        userData.put("gender", gender);
+                        userData.put("profilePictureUrl", profilePictureUrl);
 
-                                db.collection("users").document(user.getUid())
-                                        .set(userData)
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                                            finish(); // Close the activity
-                                        })
-                                        .addOnFailureListener(e -> Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show());
-                            }
-                        } else {
-                            if (task.getException() != null) {
-                                Toast.makeText(this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                        db.collection("users").document(user.getUid()).set(userData).addOnSuccessListener(aVoid -> {
+                            Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }).addOnFailureListener(e -> Toast.makeText(this, "Failed to save user data", Toast.LENGTH_SHORT).show());
+                    }
+                } else {
+                    if (task.getException() != null) {
+                        Toast.makeText(this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         });
     }
 
@@ -155,7 +135,6 @@ public class SignUpActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir("Pictures");
-
         try {
             return File.createTempFile(imageFileName, ".jpg", storageDir);
         } catch (IOException e) {
@@ -163,6 +142,7 @@ public class SignUpActivity extends AppCompatActivity {
             return null;
         }
     }
+
 
     private void uploadImageToCloudinary(Uri imageUri) {
         if (imageUri == null) {
@@ -196,4 +176,5 @@ public class SignUpActivity extends AppCompatActivity {
                 // Upload rescheduled
             }
         }).dispatch();
-    }}
+    }
+}

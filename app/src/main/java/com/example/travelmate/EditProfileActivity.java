@@ -34,6 +34,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String profilePictureUrl = "";
     private Uri imageUri;
 
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
@@ -62,7 +63,6 @@ public class EditProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Initialize views
         profileImage = findViewById(R.id.profileImage);
         editName = findViewById(R.id.editName);
         editSurname = findViewById(R.id.editSurname);
@@ -75,7 +75,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Load current user data
         loadUserData();
-        initCloudinary();
 
         // Set up profile picture change
         profileImage.setOnClickListener(v -> openImagePicker());
@@ -135,7 +134,8 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onProgress(String requestId, long bytes, long totalBytes) {}
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+            }
 
             @Override
             public void onSuccess(String requestId, Map resultData) {
@@ -152,16 +152,9 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onReschedule(String requestId, ErrorInfo error) {}
+            public void onReschedule(String requestId, ErrorInfo error) {
+            }
         }).dispatch();
-    }
-
-    private void initCloudinary() {
-        Map config = new HashMap();
-        config.put("cloud_name", BuildConfig.CLOUD_NAME);
-        config.put("api_key", BuildConfig.CLOUD_API_KEY);
-        config.put("api_secret", BuildConfig.CLOUD_API_SECRET);
-        MediaManager.init(this, config);
     }
 
     private void saveProfileChanges() {

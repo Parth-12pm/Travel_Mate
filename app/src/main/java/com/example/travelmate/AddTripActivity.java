@@ -1,25 +1,18 @@
 package com.example.travelmate;
-
-import static com.example.travelmate.BuildConfig.GOOGLE_MAPS_API_KEY;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -33,7 +26,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.textfield.TextInputLayout;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -58,10 +51,9 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Initialize Places API
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), GOOGLE_MAPS_API_KEY);
+            Places.initialize(getApplicationContext(), BuildConfig.GOOGLE_MAPS_API_KEY);
         }
 
-        // Initialize views
         btnSelectDate = findViewById(R.id.btnSelectDate);
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
         btnCreateTrip = findViewById(R.id.btnCreateTrip);
@@ -86,8 +78,8 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
         btnCreateTrip.setOnClickListener(v -> createTrip());
         toolbar.setNavigationOnClickListener(v -> { // Use setNavigationOnClickListener
             Intent i = new Intent(AddTripActivity.this, HomePageActivity.class);
-            startActivity(i);  // <--- Add this line
-            finish(); // Optional: Close the current activity
+            startActivity(i);
+            finish();
         });
 
 
@@ -143,7 +135,6 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            // Format the selected date to yyyy-MM-dd
             String formattedDate = dateFormatter.format(new Date(selection));
             tvSelectedDate.setText(formattedDate);
             tvSelectedDate.setTextColor(getResources().getColor(R.color.md_theme_onBackground));
@@ -165,16 +156,13 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
         mMap.addMarker(new MarkerOptions().position(sourceLatLng).title("Source"));
         mMap.addMarker(new MarkerOptions().position(destinationLatLng).title("Destination"));
 
-        // Create bounds to include both markers
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(sourceLatLng);
         builder.include(destinationLatLng);
         LatLngBounds bounds = builder.build();
 
-        // Move camera to show both locations with padding
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
 
-        // Add a line between the points
         mMap.addPolyline(new PolylineOptions()
                 .add(sourceLatLng, destinationLatLng)
                 .width(5f)
@@ -200,7 +188,7 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             return;
         }
-        // Create trip data
+
         Map<String, Object> trip = new HashMap<>();
         trip.put("source", sourceName);
         trip.put("destination", destinationName);
@@ -213,7 +201,8 @@ public class AddTripActivity extends AppCompatActivity implements OnMapReadyCall
         trip.put("createdAt", new Date());
         trip.put("notes", "");
         trip.put("photos", new ArrayList<String>());
-        // Save to Firestore
+
+
         FirebaseFirestore.getInstance().collection("trips")
                 .add(trip)
                 .addOnSuccessListener(documentReference -> {

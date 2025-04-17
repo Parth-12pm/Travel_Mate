@@ -39,19 +39,19 @@ public class JournalListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_list);
 
-        initializeViews();
+
+        tripsRecyclerView = findViewById(R.id.rvJournalEntries);
+        emptyState = findViewById(R.id.emptyState);
+        toolbar = findViewById(R.id.toolbar);
+        searchView = findViewById(R.id.actvSearch);
+
+
         setupToolbar();
         setupRecyclerView();
         setupSearchFunctionality();
         loadTrips();
     }
 
-    private void initializeViews() {
-        tripsRecyclerView = findViewById(R.id.rvJournalEntries);
-        emptyState = findViewById(R.id.emptyState);
-        toolbar = findViewById(R.id.toolbar);
-        searchView = findViewById(R.id.actvSearch);
-    }
 
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -94,7 +94,6 @@ public class JournalListActivity extends AppCompatActivity {
 
     private void filterTrips(String searchText) {
         filteredTripData.clear();
-
         if (searchText.isEmpty()) {
             filteredTripData.addAll(tripData);
         } else {
@@ -147,7 +146,6 @@ public class JournalListActivity extends AppCompatActivity {
                         ));
                     }
 
-                    // After loading, populate filtered list with all trips
                     filteredTripData.addAll(tripData);
                     tripAdapter.notifyDataSetChanged();
                     updateEmptyState();

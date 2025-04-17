@@ -23,13 +23,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        CloudinaryManager.initialize(getApplicationContext());
 
         // Check if the user is already logged in
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            // User is already logged in, redirect to HomePageActivity
             startActivity(new Intent(this, HomePageActivity.class));
-            finish(); // Close the LoginActivity
+            finish();
             return;
         }
 
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(this, HomePageActivity.class));
-                            finish(); // Close the LoginActivity
+                            finish();
                         } else {
                             Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }

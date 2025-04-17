@@ -49,6 +49,7 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
     private String tripId;
     private Toolbar toolbar;
     private LinearLayout photosContainer;
+    private boolean isInitialized=false;
 
     private final ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
         if (uri != null) {
@@ -68,9 +69,6 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
         photosContainer = findViewById(R.id.photosContainer);
 
         setSupportActionBar(toolbar);
-
-        // Initialize Cloudinary
-        initCloudinary();
 
         // Get trip ID from intent
         tripId = getIntent().getStringExtra("tripId");
@@ -147,14 +145,6 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    private void initCloudinary() {
-        Map config = new HashMap();
-        config.put("cloud_name", BuildConfig.CLOUD_NAME);
-        config.put("api_key", BuildConfig.CLOUD_API_KEY);
-        config.put("api_secret", BuildConfig.CLOUD_API_SECRET);
-        MediaManager.init(this, config);
-    }
-
     private void openImagePicker() {
         imagePickerLauncher.launch("image/*");
     }
@@ -198,10 +188,10 @@ public class JournalDetailsActivity extends AppCompatActivity implements OnMapRe
         // Create card container
         MaterialCardView cardView = new MaterialCardView(this);
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
-                dpToPx(120), // Fixed width for the card
-                LinearLayout.LayoutParams.MATCH_PARENT // Match parent height
+                dpToPx(120),
+                LinearLayout.LayoutParams.MATCH_PARENT
         );
-        cardParams.setMargins(0, 0, dpToPx(8), 0); // Add right margin for spacing
+        cardParams.setMargins(0, 0, dpToPx(8), 0);
         cardView.setLayoutParams(cardParams);
         cardView.setRadius(getResources().getDimension(R.dimen.card_corner_radius));
         cardView.setCardElevation(getResources().getDimension(R.dimen.card_elevation));
