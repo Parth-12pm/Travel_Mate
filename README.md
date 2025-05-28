@@ -6,8 +6,7 @@ Travel Mate is a modern and user-friendly Android app designed to assist travele
 ## Features
 - **User Authentication** (Firebase Authentication)
 - **Trip Planning** (Google Maps API for source/destination selection)
-- **Travel Journal** (Add notes, images, videos, and locations)
-- **Weather Forecast Widget** (Fetches real-time weather data)
+- **Travel Journal** (Add notes, images (video coming soon) and locations)
 - **Offline Access** (Stores data locally using Firebase Firestore caching)
 - **Profile & Settings** (User preferences and account management)
 - **Simple & Intuitive UI** (Dual-tone design with Material UI components)
@@ -49,15 +48,17 @@ Travel Mate is a modern and user-friendly Android app designed to assist travele
 5. **Run the project:**
    - Connect an Android device or use an emulator.
    - Click **Run** ▶️ in Android Studio.
-
-## Screenshots (Coming Soon)
+     
+## Release
+- check out in release section 
 
 ## Contributing
 - Feel free to fork the repo and submit pull requests!
 - Report issues or suggest new features in the **Issues** section.
 
 ## License
-This project is licensed under the **MIT License**.
+This project is not open source. All rights are reserved by the original author.
+The code, assets, and related materials in this repository are shared for review or educational purposes only and must not be copied, modified, distributed, or used commercially without explicit permission.
 
 ---
 🚀 Happy Traveling with Travel Mate! 🚀
