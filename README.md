@@ -57,9 +57,24 @@ Travel Mate is a modern and user-friendly Android app designed to assist travele
 - Report issues or suggest new features in the **Issues** section.
 
 ## License
-This project is not open source. All rights are reserved by the original author.
-The code, assets, and related materials in this repository are shared for review or educational purposes only and must not be copied, modified, distributed, or used commercially without explicit permission.
+⚖️ License & Usage Terms
+© 2025 Parth Mahadik. All Rights Reserved.
 
----
+This project and its source code are protected under a Custom License:
+
+❌ You may NOT copy, publish, distribute, upload, or post this code (in full or in part) on any public or private platform without explicit written permission from the author.
+
+🧩 Usage is strictly limited to local testing, learning, and evaluation purposes only.
+
+🚫 Commercial, academic, or public redistribution is prohibited.
+
+⚙️ You may run, test, or modify the project on your local machine for personal learning only.
+
+⚖️ Any violation will be treated as a copyright infringement under applicable law.
+
+For special permissions or collaborations, contact the author at parthsmahadik12027@gmail.com.
+
+
+##
 🚀 Happy Traveling with Travel Mate! 🚀
 
